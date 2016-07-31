@@ -16,5 +16,8 @@
     "url": "https://github.com/binarymage/mozilla-festival-ts/issues"
   },
   "private": true,
-  "homepage": "https://github.com/binarymage/mozilla-festival-ts#readme"
+  "homepage": "https://github.com/binarymage/mozilla-festival-ts#readme",
+  "dependencies": {
+    "socket.io": "^1.4.8"
+  }
 }
