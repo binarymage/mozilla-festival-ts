@@ -1,4 +1,4 @@
-/// </// <reference path="typings/index.d.ts" />
+/// <reference path="../typings/index.d.ts" />
 
 // Placeholder file for Node.js game server
 import io = require("socket.io");

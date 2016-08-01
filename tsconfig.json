@@ -7,6 +7,6 @@
         "removeComments": true,
         "sourceMap": true,
         "noLib": false,
-        "outDir": "out"
+        "outDir": "./out"
     }
 }
