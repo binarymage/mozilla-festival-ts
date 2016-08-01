@@ -1,8 +1,8 @@
 {
-  "name": "mozilla-festival",
-  "version": "1.0.0",
+  "name": "mozilla-festival-ts",
+  "version": "0.1.0",
   "description": "",
-  "main": "game.js",
+  "main": "out/game.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -10,10 +10,11 @@
     "type": "git",
     "url": "git+https://github.com/binarymage/mozilla-festival-ts.git"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "George Shore <george@georgeshore.com>",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/binarymage/mozilla-festival-ts/issues"
   },
+  "private": true,
   "homepage": "https://github.com/binarymage/mozilla-festival-ts#readme"
 }
