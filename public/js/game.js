@@ -4,8 +4,8 @@
 var canvas,			// Canvas DOM element
 	ctx,			// Canvas rendering context
 	keys,			// Keyboard input
-	localPlayer;	// Local player
-
+	localPlayer,	// Local player
+	socket;			// Socket.io client
 
 /**************************************************
 ** GAME INITIALISATION
@@ -31,6 +31,10 @@ function init() {
 	// Initialise the local player
 	localPlayer = new Player(startX, startY);
 
+	socket = io.connect('http://localhost:8000/', {
+		transports: ['websocket'],
+	});
+
 	// Start listening for events
 	setEventHandlers();
 };
@@ -46,6 +50,13 @@ var setEventHandlers = function() {
 
 	// Window resize
 	window.addEventListener("resize", onResize, false);
+
+	// Socket events
+	socket.on("connect", onSocketConnected);
+	socket.on("disconnect", onSocketDisconnect);
+	socket.on("new player", onNewPlayer);
+	socket.on("move player", onMovePlayer);
+	socket.on("remove player", onRemovePlayer);
 };
 
 // Keyboard key down
@@ -69,6 +80,25 @@ function onResize(e) {
 	canvas.height = window.innerHeight;
 };
 
+function onSocketConnected() {
+    console.log("Connected to socket server");
+};
+
+function onSocketDisconnect() {
+    console.log("Disconnected from socket server");
+};
+
+function onNewPlayer(data) {
+    console.log("New player connected: "+data.id);
+};
+
+function onMovePlayer(data) {
+
+};
+
+function onRemovePlayer(data) {
+
+};
 
 /**************************************************
 ** GAME ANIMATION LOOP
