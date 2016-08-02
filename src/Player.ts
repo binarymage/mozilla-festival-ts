@@ -2,6 +2,12 @@
 
 import io = require('socket.io');
 
+export interface PlayerInfo {
+    x: number;
+    y: number;
+    id: string;
+}
+
 export class Player {
     private _x: number;
     private _y: number;
@@ -25,6 +31,14 @@ export class Player {
 
     public get id() : string {
         return this._id;
+    }
+
+    public get info(): PlayerInfo {
+        return {
+            x: this.x,
+            y: this.y,
+            id: this.id,
+        };
     }
 
     constructor(x: number, y: number, id: string) {

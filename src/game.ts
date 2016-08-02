@@ -1,12 +1,13 @@
 /// <reference path="../typings/index.d.ts" />
 
 // Placeholder file for Node.js game server
-import io = require("socket.io");
-import util = require("util");
+import io = require('socket.io');
+import util = require('util');
+import Player = require('./Player');
 
 class Game {
     private _io: SocketIO.Server;
-    private _players: number[];
+    private _players: Player.Player[];
 
     constructor(port: number = 8000) {
         this._io = io(port, {
@@ -23,7 +24,7 @@ class Game {
     private _onClientConnect(client: SocketIO.Socket) {
         util.log(`New player has connected: ${client.id}`);
         client.on('disconnect', this._onClientDisconnect.bind(this, client))
-            .on('new player', this._onNewPlayer)
+            .on('new player', this._onNewPlayer.bind(this, client))
             .on('move player', this._onMovePlayer);
     }
 
@@ -31,7 +32,15 @@ class Game {
         util.log(`Player has disconnected: ${client.id}`);
     }
 
-    private _onNewPlayer() {
+    private _onNewPlayer(client: SocketIO.Socket, data) {
+        const newPlayer = new Player.Player(data.x, data.y, client.id);
+
+        client.broadcast.emit('new player', newPlayer.info);
+        for (let player of this._players) {
+            client.emit('new player', player.info);
+        }
+
+        this._players.push(newPlayer);
     }
 
     private _onMovePlayer() {
