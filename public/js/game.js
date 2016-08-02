@@ -103,7 +103,14 @@ function onMovePlayer(data) {
 };
 
 function onRemovePlayer(data) {
+	var removePlayer = playerById(data.id);
 
+	if (!removePlayer) {
+		console.log("Player not found: "+data.id);
+		return;
+	};
+
+	remotePlayers.splice(remotePlayers.indexOf(removePlayer), 1);
 };
 
 /**************************************************
@@ -141,4 +148,17 @@ function draw() {
 	for (i = 0; i < remotePlayers.length; i++) {
 		remotePlayers[i].draw(ctx);
 	}; 
+};
+
+/**************************************************
+** FIND PLAYER BY ID
+**************************************************/
+function playerById(id) {
+    var i;
+    for (i = 0; i < remotePlayers.length; i++) {
+        if (remotePlayers[i].id == id)
+            return remotePlayers[i];
+    };
+
+    return false;
 };

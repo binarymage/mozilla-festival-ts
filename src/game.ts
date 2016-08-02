@@ -29,7 +29,13 @@ class Game {
     }
 
     private _onClientDisconnect(client: SocketIO.Socket) {
-        util.log(`Player has disconnected: ${client.id}`);
+        let removePlayer: Player.Player = this._players.find(player => player.id == client.id);
+        if (!removePlayer) {
+            return util.log(`Player not found: ${client.id}`);
+        }
+
+        this._players = this._players.filter(player => player.id != client.id);
+        client.broadcast.emit('remove player', { id: removePlayer.id });
     }
 
     private _onNewPlayer(client: SocketIO.Socket, data) {
