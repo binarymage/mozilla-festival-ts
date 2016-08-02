@@ -5,7 +5,7 @@ import io = require('socket.io');
 export class Player {
     private _x: number;
     private _y: number;
-    private _id: any;
+    private _id: string;
 
     public get x(): number {
         return this._x;
@@ -23,16 +23,13 @@ export class Player {
         this._y = v;
     }
 
-    public get id() : any {
+    public get id() : string {
         return this._id;
     }
 
-    public set id(v : any) {
-        this._id = v;
-    }
-
-    constructor(x: number, y: number) {
+    constructor(x: number, y: number, id: string) {
         this._x = x;
         this._y = y;
+        this._id = id;
     }
 }
