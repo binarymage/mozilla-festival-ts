@@ -5,6 +5,11 @@ import io = require('socket.io');
 import util = require('util');
 import Player = require('./Player');
 
+interface Position {
+    x: number;
+    y: number;
+}
+
 class Game {
     private _io: SocketIO.Server;
     private _players: Player.Player[];
@@ -25,11 +30,11 @@ class Game {
         util.log(`New player has connected: ${client.id}`);
         client.on('disconnect', this._onClientDisconnect.bind(this, client))
             .on('new player', this._onNewPlayer.bind(this, client))
-            .on('move player', this._onMovePlayer);
+            .on('move player', this._onMovePlayer.bind(this, client));
     }
 
     private _onClientDisconnect(client: SocketIO.Socket) {
-        let removePlayer: Player.Player = this._players.find(player => player.id == client.id);
+        const removePlayer = this._players.find(player => player.id == client.id);
         if (!removePlayer) {
             return util.log(`Player not found: ${client.id}`);
         }
@@ -38,7 +43,7 @@ class Game {
         client.broadcast.emit('remove player', { id: removePlayer.id });
     }
 
-    private _onNewPlayer(client: SocketIO.Socket, data) {
+    private _onNewPlayer(client: SocketIO.Socket, data: Position) {
         const newPlayer = new Player.Player(data.x, data.y, client.id);
 
         client.broadcast.emit('new player', newPlayer.info);
@@ -49,7 +54,16 @@ class Game {
         this._players.push(newPlayer);
     }
 
-    private _onMovePlayer() {
+    private _onMovePlayer(client: SocketIO.Socket, data: Position) {
+        const movePlayer = this._players.find(player => player.id == client.id);
+        if (!movePlayer) {
+            return util.log(`Player not found: ${client.id}`);
+        }
+
+        movePlayer.x = data.x;
+        movePlayer.y = data.y;
+
+        client.broadcast.emit('move player', movePlayer.info);
     }
 }
 
