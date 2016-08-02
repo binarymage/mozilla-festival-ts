@@ -5,6 +5,7 @@ var canvas,			// Canvas DOM element
 	ctx,			// Canvas rendering context
 	keys,			// Keyboard input
 	localPlayer,	// Local player
+	remotePlayers,	// Remote players
 	socket;			// Socket.io client
 
 /**************************************************
@@ -34,6 +35,9 @@ function init() {
 	socket = io.connect('http://localhost:8000/', {
 		transports: ['websocket'],
 	});
+
+	// Initialise remote players
+	remotePlayers = [];
 
 	// Start listening for events
 	setEventHandlers();
@@ -81,7 +85,7 @@ function onResize(e) {
 };
 
 function onSocketConnected() {
-    console.log("Connected to socket server");
+    socket.emit("new player", {x: localPlayer.getX(), y: localPlayer.getY()});
 };
 
 function onSocketDisconnect() {
@@ -89,7 +93,9 @@ function onSocketDisconnect() {
 };
 
 function onNewPlayer(data) {
-    console.log("New player connected: "+data.id);
+    var newPlayer = new Player(data.x, data.y);
+	newPlayer.id = data.id;
+	remotePlayers.push(newPlayer);
 };
 
 function onMovePlayer(data) {
@@ -129,4 +135,10 @@ function draw() {
 
 	// Draw the local player
 	localPlayer.draw(ctx);
+
+	// Draw the remote players
+	var i;
+	for (i = 0; i < remotePlayers.length; i++) {
+		remotePlayers[i].draw(ctx);
+	}; 
 };
